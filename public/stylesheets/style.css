@@ -1,8 +1,116 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.line {
+  border-bottom: 1px solid #eeeeee;
+  margin-bottom: 10px;
+
+}
+.row-label {
+  display: inline-block;
+  width: 10%;
+  vertical-align: top;
+}
+.row-value {
+  display: inline-block;
+  width: 50%;
+
 }
 
-a {
-  color: #00B7FF;
+.sync-row {
+  text-align: right;
+}
+.files-container {
+  height: 43%;
+  overflow-y: auto;
+}
+.footer-row {
+  border-bottom: 0;
+}
+
+.status-deleted {
+  color: red;
+}
+.status-added {
+  color: #61b830;
+}
+.status-modified {
+  color: #d4d42b;
+}
+.files-container > div {
+  width: 100%;
+}
+.files-container > div > span {
+  display: inline-block;
+}
+.files-container .file-name {
+  width: 70%;
+}
+.files-container .file-status {
+  width: 20%;
+}
+
+.contacts-dialog {
+  display: inline-block;
+  width: 30%;
+  height: 100%;
+  vertical-align: top;
+
+}
+.chat-dialog {
+  display: inline-block;
+  width: 69%;
+  height: 100%;
+
+}
+.person-row {
+  cursor: pointer;
+}
+.person-row:hover{
+  background-color: #eeeeee;
+}
+.person-row.selected{
+  background-color: #17a2b859;
+}
+.chat-container {
+  height: 100%;
+}
+.send-message-btn {
+  float: right;
+  display: inline-block;
+}
+.message-text {
+  display: inline-block;
+  width: 84%;
+  box-shadow: black 0px 0px 0px 2px;
+
+}
+
+.message-row > div {
+  display: inline-block;
+}
+.message-author {
+  font-weight: bold;
+  color: red;
+  margin-right: 5px;
+}
+.message-author.me {
+  color: green;
+}
+.message-time {
+  visibility: hidden;
+  color: #959090;
+  float: right;
+  display: inline-block;
+}
+.message-row:hover {
+  background-color: rgba(238, 238, 238, 0.53);
+
+}
+.message-row:hover .message-time {
+  visibility: visible;
+}
+.conversation-section {
+  height: 89%;
+  border: 1px solid;
+  border-bottom: none;
+  border-top: none;
 }
