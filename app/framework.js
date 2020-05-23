@@ -31,7 +31,7 @@ exports.GetIdentity = () => {
                 internal.SaveConfig();
                 console.log('Retrieved identity for chat successfully!');
 
-                console.log('done initializing');
+                console.log('done initializing chat extension');
             } else {
                 console.log('Failed to get valid identity information.');
 
@@ -95,7 +95,7 @@ exports.RetrieveMessages = () => axios.post('http://localhost:3000/extension/upd
 )
     .then((res) => {
         if (res.data.status) {
-            console.log('Retrieved messages successfully!');
+            // console.log('Retrieved messages successfully!');
         }
         return {status: res.data.status, content: res.data.content}
 
