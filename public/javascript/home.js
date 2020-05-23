@@ -11,10 +11,10 @@ $(document).ready(function () {
 
     $('.send-message-btn').on('click',function () {
         let message = $('.message-text').text();
-        let author = $('.chat-container').attr('data-author');
+        let author = $('.chat-container').attr('data-author')+":";
         let time = moment().format();
         let recipient = $('.chat-dialog').attr('data-recipient');
-        // PostMessage(message,time,author,true);
+        PostMessage(message,time,author,true);
         SendMessage(author,recipient,message,time);
         $(".message-text").text('');
         $(".message-text").focus();
@@ -25,10 +25,11 @@ $(document).ready(function () {
 function UpdateInterfaceMessages() {
     //check if we need to update current dialog
     let current_recipient = $('.chat-dialog').attr('data-recipient');
-    $('.conversation-section .message-row').remove();
+    // $('.conversation-section .message-row').remove();
     for(let msgIter=0;msgIter<messageStore.length;msgIter++) {
         if(messageStore[msgIter].recipient === current_recipient) {
             let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author');
+            if(!CheckMessageExists(messageStore[msgIter].message,messageStore[msgIter].sender,messageStore[msgIter].time))
             PostMessage(messageStore[msgIter].message,messageStore[msgIter].time,messageStore[msgIter].sender,is_me);
         }
     }
@@ -44,7 +45,6 @@ function FetchConversationData() {
         dataType: 'json',
         success(response) {
             if (response.status === true) {
-                console.log('successfully fetched messages');
                 messageStore = response.content;
                 UpdateInterfaceMessages();
 
@@ -58,7 +58,19 @@ function FetchConversationData() {
         }
     });
 }
+function CheckMessageExists(message,author,time) {
+    let result = false;
+    $('.conversation-section .message-row').each(function () {
+        if($(this).find('.message-content').text() === message &&
+            $(this).find('.message-author').text() === author+":" &&
+            $(this).find('.message-time').text() === moment(time).format("ddd, h:mm:ss A")
+        ) {
+            result = true;
 
+        }
+    });
+    return result;
+}
 function PostMessage(message,time,authorName,isMe) {
  let $message_row= $('<div/>',{
      class: 'message-row'
@@ -230,7 +242,7 @@ if(tribute === null) {
             }]
     });
 
-    tribute.attach(document.querySelectorAll(".commit-message-input"));
+    tribute.attach(document.querySelectorAll(".message-text"));
 }
 else {
     tribute.append(0,users);
@@ -278,7 +290,7 @@ function GetSharedData() {
         dataType: 'json',
         success(response) {
             if (response.status === true) {
-                let users = response.content[3].data || [];
+                users = response.content[3].data || [];
                 let issues = response.content[1].data || [];
                 let commits = response.content[2].data || [];
                 InitializeMentions(users,issues,commits);

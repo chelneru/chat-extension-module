@@ -113,4 +113,5 @@
   border: 1px solid;
   border-bottom: none;
   border-top: none;
+  overflow-y: auto;
 }
