@@ -28,7 +28,7 @@ function UpdateInterfaceMessages() {
     // $('.conversation-section .message-row').remove();
     for(let msgIter=0;msgIter<messageStore.length;msgIter++) {
         if(messageStore[msgIter].recipient === current_recipient) {
-            let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author');
+            let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author')+":";
             if(!CheckMessageExists(messageStore[msgIter].message,messageStore[msgIter].sender,messageStore[msgIter].time))
             PostMessage(messageStore[msgIter].message,messageStore[msgIter].time,messageStore[msgIter].sender,is_me);
         }
@@ -62,7 +62,7 @@ function CheckMessageExists(message,author,time) {
     let result = false;
     $('.conversation-section .message-row').each(function () {
         if($(this).find('.message-content').text() === message &&
-            $(this).find('.message-author').text() === author+":" &&
+            $(this).find('.message-author').text() === author &&
             $(this).find('.message-time').text() === moment(time).format("ddd, h:mm:ss A")
         ) {
             result = true;
@@ -82,7 +82,7 @@ function PostMessage(message,time,authorName,isMe) {
 
     let $author = $('<div/>',{
         class:"message-author",
-        text:authorName+":",
+        text:authorName,
     });
     let $time = $('<div/>',{
         class:"message-time",
