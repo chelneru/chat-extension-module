@@ -298,11 +298,10 @@ function GetSharedData() {
                 let commits = response.content[2].data || [];
                 InitializeMentions(users, issues, commits);
                 UpdateContacts();
-                if (getSharedDataInterval === null) {
-                    getSharedDataInterval = setInterval(function () {
-                        GetSharedData();
-                    }, 3000);
-                }
+                setTimeout(function () {
+                    GetSharedData();
+                }, 3000);
+
             }
 
         },
