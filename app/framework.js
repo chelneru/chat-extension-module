@@ -64,7 +64,7 @@ exports.RetrieveSharedData = () => axios.post('http://localhost:3000/extension/r
         }
     })
     .catch((error) => {
-        console.error('Error retrieving shared data:',error.toString());
+        console.error('Error retrieving shared data for chat:',error.toString());
     })
 
 exports.SendMessage = (data) => axios.post('http://localhost:3000/extension/publish-data', {
