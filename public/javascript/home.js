@@ -6,6 +6,7 @@ let attached = false;
 let tribute = null;
 let getMessagesInterval = null;
 let messageStore = [];
+let current_selected = 'GLOBAL';
 $(document).ready(function () {
     GetSharedData();
 
@@ -20,17 +21,46 @@ $(document).ready(function () {
         $(".message-text").focus();
     });
     FetchConversationData();
+
+    $(document).on('click','.person-row',function () {
+        $('.person-row').removeClass('selected');
+        $(this).addClass('selected');
+        let user = $(this).find('.person').text();
+        current_selected = user;
+        $('.chat-dialog').attr('data-recipient',user);
+
+        RefreshMessagesDialog();
+        UpdateInterfaceMessages();
+    });
 });
 
 function UpdateInterfaceMessages() {
     //check if we need to update current dialog
     let current_recipient = $('.chat-dialog').attr('data-recipient');
-    // $('.conversation-section .message-row').remove();
+    if(current_recipient =='GLOBAL') {
+        current_recipient = '*';
+    }
+    let current_author = $('.chat-container').attr('data-author');
     for (let msgIter = 0; msgIter < messageStore.length; msgIter++) {
+        messageStore[msgIter].sender = messageStore[msgIter].sender.replace(':','');
+
+        if(current_recipient == '*') {
         if (messageStore[msgIter].recipient === current_recipient) {
-            let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author') + ":";
+            //public message
+            let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author');
             if (!CheckMessageExists(messageStore[msgIter].message, messageStore[msgIter].sender, messageStore[msgIter].time))
                 PostMessage(messageStore[msgIter].message, messageStore[msgIter].time, messageStore[msgIter].sender, is_me);
+        }
+        }
+        else {
+         if((current_recipient == messageStore[msgIter].recipient && current_author == messageStore[msgIter].sender) ||
+            (current_author == messageStore[msgIter].recipient && current_recipient == messageStore[msgIter].sender))
+        {
+            //private message
+            let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author');
+            if (!CheckMessageExists(messageStore[msgIter].message, messageStore[msgIter].sender, messageStore[msgIter].time))
+                PostMessage(messageStore[msgIter].message, messageStore[msgIter].time, messageStore[msgIter].sender, is_me);
+        }
         }
     }
 
@@ -96,6 +126,9 @@ function PostMessage(message, time, authorName, isMe) {
     $('.conversation-section').append($message_row);
 }
 
+function RefreshMessagesDialog(){
+    $('.chat-dialog').find('.message-row').remove();
+}
 function SendMessage(sender, recipient, message, time) {
     $.ajax({
         url: 'http://localhost:3003/sendmessage',
@@ -255,8 +288,11 @@ function InitializeMentions(users, issues, commits) {
 function UpdateContacts() {
     $('.contacts-dialog .person-row').remove();
     let $person_row = $('<div/>', {
-        class: 'person-row selected'
+        class: 'person-row'
     });
+    if(current_selected =='GLOBAL') {
+        $($person_row).addClass('selected');
+    }
     let $name = $('<div/>', {
         class: 'person',
         text: 'GLOBAL'
@@ -273,7 +309,9 @@ function UpdateContacts() {
         let $person_row = $('<div/>', {
             class: 'person-row'
         });
-        let $name = $('<div/>', {
+        if(current_selected == users[iter].name) {
+            $($person_row).addClass('selected');
+        }        let $name = $('<div/>', {
             class: 'person',
             text: users[iter].name
 
