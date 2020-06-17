@@ -81,10 +81,11 @@
 }
 .message-text {
   display: inline-block;
-  width: 68%;
+  width: 38vw;
   margin-left: 1px;
   height: 35px;
   box-shadow: black 0px 0px 0px 2px;
+  background-color: white;
 }
 
 .message-row > div {
@@ -112,7 +113,10 @@
   visibility: visible;
 }
 .conversation-section {
-  height: 89%;
-  border-bottom: 1px solid black;
+  height: 80%;
   overflow-y: auto;
+}
+.typing-section {
+  background-color: #eeee;
+  padding: 10px 5px;
 }

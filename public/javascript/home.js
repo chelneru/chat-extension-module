@@ -12,7 +12,7 @@ $(document).ready(function () {
 
     $('.send-message-btn').on('click', function () {
         let message = $('.message-text').text();
-        let author = $('.chat-container').attr('data-author') + ":";
+        let author = $('.chat-container').attr('data-author');
         let time = moment().format();
         let recipient = $('.chat-dialog').attr('data-recipient');
         PostMessage(message, time, author, true);
@@ -48,7 +48,7 @@ function UpdateInterfaceMessages() {
         if (messageStore[msgIter].recipient === current_recipient) {
             //public message
             let is_me = messageStore[msgIter].sender === $('.chat-container').attr('data-author');
-            if (!CheckMessageExists(messageStore[msgIter].message, messageStore[msgIter].sender, messageStore[msgIter].time))
+            if (!CheckMessageExists(messageStore[msgIter].message, messageStore[msgIter].sender+':', messageStore[msgIter].time))
                 PostMessage(messageStore[msgIter].message, messageStore[msgIter].time, messageStore[msgIter].sender, is_me);
         }
         }
@@ -112,7 +112,7 @@ function PostMessage(message, time, authorName, isMe) {
 
     let $author = $('<div/>', {
         class: "message-author",
-        text: authorName,
+        text: authorName+':',
     });
     let $time = $('<div/>', {
         class: "message-time",
