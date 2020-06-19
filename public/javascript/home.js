@@ -152,6 +152,8 @@ function UpdateConversationsData() {
 }
 
 function InitializeMentions(users, issues, commits) {
+    users = ['local','remote'];
+
     if (tribute === null) {
         tribute = new Tribute({
             collection: [{
@@ -279,8 +281,8 @@ function InitializeMentions(users, issues, commits) {
 
         tribute.attach(document.querySelectorAll(".message-text"));
     } else {
-        tribute.append(0, users);
-        tribute.append(1, issues);
+        // tribute.append(0, users);
+        // tribute.append(1, issues);
     }
 
 }
