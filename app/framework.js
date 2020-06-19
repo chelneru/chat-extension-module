@@ -27,7 +27,7 @@ exports.GetIdentity = () => {
                     email: res.data.identity.email,
                 };
 
-                global.moduleConfig.identity = {...global.moduleConfig.identity, ...new_identity}; //update new identity
+                global.moduleConfig.identity = new_identity; //update new identity
                 internal.SaveConfig();
                 console.log('Retrieved identity for chat successfully!');
 
