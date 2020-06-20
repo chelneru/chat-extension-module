@@ -407,16 +407,23 @@ function GetSharedData() {
         dataType: 'json',
         success(response) {
             if (response.status === true) {
+                if(response.content[3].data === undefined ) {
+                    response.content[3].data = [];
+                }
                 let new_users = GetNewElements(users,response.content[3].data.map(function (el) {
                     return el.name;
                 }) || [] );
                 users = users.concat(new_users);
-
+                    if(response.content[1].data === undefined ) {
+                        response.content[1].data = [];
+                    }
                 let new_issues = GetNewElements(issues,response.content[1].data.map(function (el) {
                     return el.id;
                 }) || [] );
                 issues = issues.concat(new_issues);
-
+                if(response.content[0].data === undefined ) {
+                    response.content[0].data = [];
+                }
                 let new_commits = GetNewElements(commits,response.content[0].data || [] );
                 commits = commits.concat(new_commits);
 
