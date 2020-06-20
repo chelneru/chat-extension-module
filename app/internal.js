@@ -5,8 +5,15 @@ exports.LoadConfig = () => {
     global.sharedData = {};
     const appRoot = require('app-root-path').toString();
     if (fs.existsSync(path.join(appRoot, 'settings.json'))) {
+        try {
         let rawdata = fs.readFileSync(path.join(appRoot,'settings.json'));
+
         global.moduleConfig = JSON.parse(rawdata.toString());
+        }catch (e) {
+            console.log('Invalid settings file for chat extension.',e.toString());
+            global.moduleConfig = {};
+            exports.SaveConfig();
+        }
     } else {
         global.moduleConfig = {};
         exports.SaveConfig();

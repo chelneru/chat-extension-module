@@ -57,7 +57,7 @@
 }
 .chat-dialog {
   display: inline-block;
-  width: 69%;
+  width: 67%;
   height: 100%;
 
 }
@@ -75,13 +75,16 @@
 }
 .send-message-btn {
   float: right;
+  margin-right: 8px;
   display: inline-block;
 }
 .message-text {
   display: inline-block;
-  width: 84%;
+  width: 43vw;
+  margin-left: 1px;
+  height: 35px;
   box-shadow: black 0px 0px 0px 2px;
-
+  background-color: white;
 }
 
 .message-row > div {
@@ -109,9 +112,10 @@
   visibility: visible;
 }
 .conversation-section {
-  height: 89%;
-  border: 1px solid;
-  border-bottom: none;
-  border-top: none;
+  height: 80%;
   overflow-y: auto;
+}
+.typing-section {
+  background-color: #eeee;
+  padding: 10px 5px;
 }

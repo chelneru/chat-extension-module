@@ -27,7 +27,7 @@ exports.GetIdentity = () => {
                     email: res.data.identity.email,
                 };
 
-                global.moduleConfig.identity = {...global.moduleConfig.identity, ...new_identity}; //update new identity
+                global.moduleConfig.identity = new_identity; //update new identity
                 internal.SaveConfig();
                 console.log('Retrieved identity for chat successfully!');
 
@@ -64,7 +64,7 @@ exports.RetrieveSharedData = () => axios.post('http://localhost:3000/extension/r
         }
     })
     .catch((error) => {
-        console.error('Error retrieving shared data:',error.toString());
+        console.error('Error retrieving shared data for chat:',error.toString());
     })
 
 exports.SendMessage = (data) => axios.post('http://localhost:3000/extension/publish-data', {
