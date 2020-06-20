@@ -1,6 +1,7 @@
 let sharedData = null;
 let users = [];
 let issues = [];
+let commits = [];
 let getSharedDataInterval = null;
 let attached = false;
 let tribute = null;
@@ -79,7 +80,7 @@ function FetchConversationData() {
                 messageStore = response.content;
                 UpdateInterfaceMessages();
             }
-            setTimeout(FetchConversationData, 1000);
+            setTimeout(FetchConversationData, 3000);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -152,9 +153,17 @@ function UpdateConversationsData() {
 }
 
 function InitializeMentions(users, issues, commits) {
-    users = [{name:'local'},{name:'remote'}];
-    issues = [{name:'830086d3'}];
-    commits = [{name:'161aeff9'}]
+    // users = [{name:'local'},{name:'remote'}];
+    // commits = [{name:'161aeff9'}]
+    issues = issues.map(function (el) {
+        return {id:el.slice(0,7)};
+    })
+    commits = commits.map(function (el) {
+        return {id:el.slice(0,7)};
+    })
+    users = users.map(function (el) {
+            return {name:el}
+    })
     if (tribute === null) {
         tribute = new Tribute({
             collection: [{
@@ -230,7 +239,7 @@ function InitializeMentions(users, issues, commits) {
                     menuItemTemplate: function (item) {
                         //TODO
 
-                        return item.original.name;
+                        return item.original.id;
 
                     },
                     // template for when no match is found (optional),
@@ -241,8 +250,8 @@ function InitializeMentions(users, issues, commits) {
                     // container must be a positioned element for the menu to appear correctly ie. `position: relative;`
                     // default container is the body
                     menuContainer: document.body,
-                    lookup: 'name',
-                    fillAttr: 'name',
+                    lookup: 'id',
+                    fillAttr: 'id',
 
                     // REQUIRED: array of objects to match
                     values: issues,
@@ -292,7 +301,7 @@ function InitializeMentions(users, issues, commits) {
                     menuItemTemplate: function (item) {
                         //TODO
 
-                        return item.original.name;
+                        return item.original.id;
 
                     },
                     // template for when no match is found (optional),
@@ -303,8 +312,8 @@ function InitializeMentions(users, issues, commits) {
                     // container must be a positioned element for the menu to appear correctly ie. `position: relative;`
                     // default container is the body
                     menuContainer: document.body,
-                    lookup: 'name',
-                    fillAttr: 'name',
+                    lookup: 'id',
+                    fillAttr: 'id',
 
                     // REQUIRED: array of objects to match
                     values: commits,
@@ -344,8 +353,10 @@ function InitializeMentions(users, issues, commits) {
 
         tribute.attach(document.querySelectorAll(".message-text"));
     } else {
-        // tribute.append(0, users);
-        // tribute.append(1, issues);
+        tribute
+        tribute.append(0, users);
+        tribute.append(1, issues);
+        tribute.append(2, commits);
     }
 
 }
@@ -374,11 +385,11 @@ function UpdateContacts() {
         let $person_row = $('<div/>', {
             class: 'person-row'
         });
-        if(current_selected == users[iter].name) {
+        if(current_selected == users[iter]) {
             $($person_row).addClass('selected');
         }        let $name = $('<div/>', {
             class: 'person',
-            text: users[iter].name
+            text: users[iter]
 
         });
         let $no_of_msg = $('<span/>', {
@@ -396,10 +407,21 @@ function GetSharedData() {
         dataType: 'json',
         success(response) {
             if (response.status === true) {
-                users = response.content[3].data || [];
-                let issues = response.content[1].data || [];
-                let commits = response.content[2].data || [];
-                InitializeMentions(users, issues, commits);
+                let new_users = GetNewElements(users,response.content[3].data.map(function (el) {
+                    return el.name;
+                }) || [] );
+                users = users.concat(new_users);
+
+                let new_issues = GetNewElements(issues,response.content[1].data.map(function (el) {
+                    return el.id;
+                }) || [] );
+                issues = issues.concat(new_issues);
+
+                let new_commits = GetNewElements(commits,response.content[0].data || [] );
+                commits = commits.concat(new_commits);
+
+
+                InitializeMentions(new_users, new_issues, new_commits);
                 UpdateContacts();
                 setTimeout(function () {
                     GetSharedData();
@@ -413,4 +435,13 @@ function GetSharedData() {
 
         }
     });
+}
+function GetNewElements(oldArray,newArray){
+    let resultArray = [];
+    for(let iter=0;iter<newArray.length;iter++) {
+        if(oldArray.findIndex(i => i == newArray[iter]) < 0) {
+            resultArray.push(newArray[iter]);
+        }
+    }
+    return resultArray;
 }
