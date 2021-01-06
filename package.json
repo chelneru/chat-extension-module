@@ -17,7 +17,7 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "mocha": "^5.1.1",
     "supertest": "^3.0.0"
   }
